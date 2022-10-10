@@ -42,7 +42,7 @@ class Story(models.Model):
            short description of fauvism landscape with forest
            short description of mask item in futuristic neon style
         """
-        BASE_TEXT = 'short description of'
+        BASE_TEXT = 'Generate a short description of'
         style = self._get_style()
         type = entity['type']
         characters = entity.get('characters', None)
@@ -56,7 +56,7 @@ class Story(models.Model):
             text = (f'{BASE_TEXT} {style} landscape with {self._get_context(entity)}'
                           + (f' and {characters_text}' if characters_count else ''))
         elif type == 'character':
-            text = f'{BASE_TEXT} {characters_text}'
+            text = f'{BASE_TEXT} {characters_text} in {style} style'
         elif type == 'item':
             text = f'{BASE_TEXT} {self._get_context(entity)} item in {style} style'
         
