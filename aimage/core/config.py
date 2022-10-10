@@ -21,7 +21,7 @@ CHARACTERS = [
     "ape",
     "bird",
     "cat",
-    "crow"
+    "crow",
     "dog",
     "dragon",
     "devil",
@@ -57,7 +57,7 @@ STYLES = [
     "impressionism",
     "pastel drawing",
     "pop art",
-    "vaporwave"
+    "vaporwave",
     "watercolor",
     "woodcut"
 ]
@@ -69,7 +69,7 @@ ENTITIES = {
         "context": [
             "beach",
             "canyon",
-            "cave"
+            "cave",
             "desert",
             "forest",
             "island",
