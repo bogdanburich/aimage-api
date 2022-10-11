@@ -5,8 +5,8 @@ from .config import MAX_TOKENS, MODEL, TEMPERATURE
 
 class OpenAIClient(openai.Completion):
 
-    async def get_response(self, text) -> dict:
-        response = await self.create(
+    def get_response(self, text) -> dict:
+        response = self.create(
             model=MODEL,
             temperature=TEMPERATURE,
             max_tokens=MAX_TOKENS,
