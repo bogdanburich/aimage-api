@@ -1,4 +1,7 @@
 from django.apps import AppConfig
+from django.conf import settings
+
+import openai
 
 
 class CoreConfig(AppConfig):
@@ -6,5 +9,7 @@ class CoreConfig(AppConfig):
     name = 'core'
 
     def ready(self) -> None:
-        """Set up data for the app."""
+        """App base settings."""
+        openai.api_key = settings.OPENAI_API_KEY
+        openai.organization = settings.OPENAI_ORG_KEY
         return super().ready()

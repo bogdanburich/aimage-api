@@ -1,6 +1,10 @@
 import random
+import openai
 from django.db import models
+from django.conf import settings
 
+
+from .clients import OpenAIClient
 from .config import CHARACTERISTICS, CHARACTERS, STYLES, ENTITIES
 
 
@@ -62,10 +66,18 @@ class Story(models.Model):
         
         return text
 
+    def _generate_story(self, text) -> str:
+        """Generate story based on generated text"""
+        client = OpenAIClient()
+        story = client.get_text(text)
+        return story
+
+
     def save(self, *args, **kwargs) -> None:
         entity = self._get_entity()
         self.type = entity['type']
         self.text = self._generate_text(entity)
+        self.story = self._generate_story(self.text)
         super(Story, self).save(*args, **kwargs)
 
     class Meta:

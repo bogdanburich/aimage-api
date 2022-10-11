@@ -1,0 +1,18 @@
+import openai
+from .config import MODEL, TEMPERATURE, MAX_TOKENS
+
+class OpenAIClient(openai.Completion):
+
+    async def get_response(self, text) -> dict:
+        response = await self.create(
+            model=MODEL,
+            temperature=TEMPERATURE,
+            max_tokens=MAX_TOKENS,
+            prompt=text,
+        )
+        return response.data
+    
+    def get_text(self, *args) -> str:
+        response = self.get_response(*args)
+        text = response['choices'][0]['text']
+        return text.strip().replace('\n', ' ')
