@@ -106,12 +106,12 @@ class Image(models.Model):
     class Meta:
         verbose_name_plural = "Images"
 
-    def save(self, *args, **kwargs):
+    async def save(self, *args, **kwargs):
         self.story = Story.objects.create()
         client = DalleClient()
 
-        tasks = client.text2im(self.story.story)
-        for image in tasks.download():
+        tasks = await client.text2im(self.story.story)
+        async for image in tasks.download_async():
             self.pk = None  # avoid overwriting existing image
             image_io = BytesIO()
             image = image.to_pil().save(image_io, format='PNG')
