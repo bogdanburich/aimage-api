@@ -1,4 +1,5 @@
 import random
+from typing import Any, Optional
 
 from django.db import models
 
@@ -14,18 +15,23 @@ class Story(models.Model):
     story = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def _random(self, objects) -> Any[str, int, dict]:
+        return random.choice(objects)
+
     def _get_style(self) -> str:
-        return random.choice(STYLES)
+        return self._random(STYLES)
 
     def _get_entity(self) -> dict:
-        entity = random.choice(list(ENTITIES.keys()))
-        return ENTITIES[entity]
+        return ENTITIES[self._random(list(ENTITIES.keys()))]
 
     def _get_characteristic(self) -> str:
-        return random.choice(CHARACTERISTICS)
+        return self._random(CHARACTERISTICS)
 
     def _get_character(self) -> str:
-        return random.choice(CHARACTERS)
+        return self._random(CHARACTERS)
+
+    def _get_characters_count(self, entity) -> Optional[int]:
+        return self._random(entity.get('characters'))
 
     def _get_characteres_text(self, count) -> str:
         if count == 1:
@@ -40,7 +46,7 @@ class Story(models.Model):
         )
 
     def _get_context(self, entity) -> str:
-        return random.choice(entity['context'])
+        return self._random(entity['context'])
 
     def _generate_text(self, entity) -> str:
         """Generate text to generate story, exmaples:
@@ -54,7 +60,7 @@ class Story(models.Model):
         characters = entity.get('characters', None)
 
         if characters:
-            characters_count = random.choice(entity.get('characters'))
+            characters_count = self._get_characters_count(entity)
             if characters_count is not None:
                 characters_text = self._get_characteres_text(characters_count)
 
