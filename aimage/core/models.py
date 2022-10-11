@@ -5,6 +5,7 @@ from typing import Optional, Union
 
 from django.core.files.base import ContentFile
 from django.db import models
+from django.utils.html import format_html
 
 from .clients import DalleClient, OpenAIClient
 from .config import CHARACTERISTICS, CHARACTERS, ENTITIES, STYLES
@@ -17,6 +18,9 @@ class Story(models.Model):
     text = models.TextField()
     story = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.story
 
     def _random(self, objects) -> Union[str, int, dict]:
         return random.choice(objects)
@@ -106,12 +110,21 @@ class Image(models.Model):
     class Meta:
         verbose_name_plural = "Images"
 
-    async def save(self, *args, **kwargs):
+    def __str__(self):
+        return self.image.url
+
+    def display_image(self):
+        html = f'<img src="{self.image.url}" width="300" height="300" />'
+        if self.image:
+            return format_html(html)
+        return 'No image'
+
+    def save(self, *args, **kwargs):
         self.story = Story.objects.create()
         client = DalleClient()
 
-        tasks = await client.text2im(self.story.story)
-        async for image in tasks.download_async():
+        tasks = client.text2im(self.story.story)
+        for image in tasks.download():
             self.pk = None  # avoid overwriting existing image
             image_io = BytesIO()
             image = image.to_pil().save(image_io, format='PNG')
