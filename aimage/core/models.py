@@ -1,9 +1,12 @@
 import random
-from typing import Any, Optional
+import uuid
+from io import BytesIO
+from typing import Optional, Union
 
+from django.core.files.base import ContentFile
 from django.db import models
 
-from .clients import OpenAIClient
+from .clients import DalleClient, OpenAIClient
 from .config import CHARACTERISTICS, CHARACTERS, ENTITIES, STYLES
 
 
@@ -15,7 +18,7 @@ class Story(models.Model):
     story = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def _random(self, objects) -> Any[str, int, dict]:
+    def _random(self, objects) -> Union[str, int, dict]:
         return random.choice(objects)
 
     def _get_style(self) -> str:
@@ -91,3 +94,28 @@ class Story(models.Model):
 
     class Meta:
         verbose_name_plural = "Stories"
+
+
+class Image(models.Model):
+    """Image model."""
+
+    story = models.ForeignKey(Story, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='images')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = "Images"
+
+    def save(self, *args, **kwargs):
+        self.story = Story.objects.create()
+        client = DalleClient()
+
+        tasks = client.text2im(self.story.story)
+        for image in tasks.download():
+            self.pk = None  # avoid overwriting existing image
+            image_io = BytesIO()
+            image = image.to_pil().save(image_io, format='PNG')
+            file = ContentFile(image_io.getvalue())
+            name = f'{uuid.uuid4()}.png'
+            self.image.save(name, file, save=False)
+            super(Image, self).save(*args, **kwargs)
