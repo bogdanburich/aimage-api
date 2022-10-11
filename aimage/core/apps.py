@@ -1,7 +1,6 @@
+import openai
 from django.apps import AppConfig
 from django.conf import settings
-
-import openai
 
 
 class CoreConfig(AppConfig):

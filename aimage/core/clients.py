@@ -1,5 +1,7 @@
 import openai
-from .config import MODEL, TEMPERATURE, MAX_TOKENS
+
+from .config import MAX_TOKENS, MODEL, TEMPERATURE
+
 
 class OpenAIClient(openai.Completion):
 
@@ -11,7 +13,7 @@ class OpenAIClient(openai.Completion):
             prompt=text,
         )
         return response.data
-    
+
     def get_text(self, *args) -> str:
         response = self.get_response(*args)
         text = response['choices'][0]['text']
