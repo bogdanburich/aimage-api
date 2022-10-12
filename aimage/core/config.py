@@ -2,7 +2,7 @@ MODEL = "text-davinci-002"
 
 TEMPERATURE = 0.9
 
-MAX_TOKENS = 256
+MAX_TOKENS = 200
 
 CHARACTERISTICS = [
     "bizarre",
