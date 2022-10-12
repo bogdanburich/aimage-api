@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from .forms import ImageAdminForm
 from .models import Image, Story
 
 admin.site.site_header = 'aimage'
@@ -15,7 +16,17 @@ class StoryAdmin(admin.ModelAdmin):
 
 @admin.register(Image)
 class ImageAdmin(admin.ModelAdmin):
+    form = ImageAdminForm
     search_fields = ('story__text',)
     list_display = ('display_image', 'story', 'created_at')
     list_filter = ('story__type',)
-    readonly_fields = ('id', 'image', 'story', 'created_at')
+    fieldsets = (
+        (None, {
+            'fields': ('count',)
+        }),)
+
+    def save_model(self, request, obj, form, change):
+        count = form.cleaned_data.get('count')
+        for image in range(count):
+            image = Image()
+            image.save()
