@@ -20,6 +20,7 @@ class ImageAdmin(admin.ModelAdmin):
     search_fields = ('story__text',)
     list_display = ('display_image', 'story', 'created_at')
     list_filter = ('story__type',)
+    list_per_page = 10
     fieldsets = (
         (None, {
             'fields': ('count',)

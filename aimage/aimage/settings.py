@@ -25,7 +25,7 @@ if ENVIRONMENT == 'DEV':
 else:
     DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 INSTALLED_APPS = [
@@ -70,12 +70,25 @@ TEMPLATES = [
 WSGI_APPLICATION = 'aimage.wsgi.application'
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if ENVIRONMENT == 'DEV':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+
+else:
+    DATABASES = {
+        'default': {
+            'DB_ENGINE': os.getenv('DB_ENGINE'),
+            'DB_NAME': os.getenv('DB_NAME'),
+            'DB_USER': os.getenv('DB_USER'),
+            'DB_PASSWORD': os.getenv('DB_PASSWORD'),
+            'DB_HOST': os.getenv('DB_HOST'),
+            'DB_PORT': os.getenv('DB_PORT'),
+        }
+    }
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -104,6 +117,8 @@ USE_TZ = True
 
 
 STATIC_URL = 'static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = 'media/'
 
