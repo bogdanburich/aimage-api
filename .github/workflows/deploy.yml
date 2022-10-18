@@ -1,0 +1,20 @@
+name: Deploy
+
+on:
+  worflow_dispatch:
+
+deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands to deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          script: |
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/aimage-api:lastest
+            sudo docker-compose stop
+            sudo docker-compose rm -f aimage
+            sudo docker-compose up -d
