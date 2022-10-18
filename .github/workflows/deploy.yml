@@ -1,9 +1,9 @@
 name: Deploy
 
-on:
-  worflow_dispatch:
+on: workflow_dispatch
 
-deploy:
+jobs:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: executing remote ssh commands to deploy
