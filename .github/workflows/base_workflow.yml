@@ -2,7 +2,7 @@ name: Base workflow
 
 on:
   push:
-    path-ignore:
+    paths-ignore:
       - '**/README.md'
       - '**/infra/'
 
@@ -20,11 +20,11 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install flake8 pep8-naming flake8-broken-line flake8-return flake8-isort
-        pip install -r backend/requirements.txt
+        pip install -r aimage/requirements.txt
     
     - name: Test with flake8
       run: |
-        python -m flake8 backend
+        python -m flake8 aimage
   
   build_and_push:
     name: Push backend to Docker Hub
@@ -44,7 +44,7 @@ jobs:
       - name: Push to Docker Hub
         uses: docker/build-push-action@v3
         with:
-          context: ./backend
-          file: ./backend/Dockerfile
+          context: ./aimage
+          file: ./aimage/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/aimage-api:latest
