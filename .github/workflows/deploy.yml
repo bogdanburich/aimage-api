@@ -36,10 +36,10 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/aimage-api:lastest
-            sudo docker-compose stop
-            sudo docker-compose rm -f aimage
-            sudo docker-compose up -d
+            docker pull ${{ secrets.DOCKER_USERNAME }}/aimage-api:lastest
+            docker-compose stop
+            docker-compose rm -f aimage
+            docker-compose up -d
   
   notification:
     runs-on: ubuntu-latest
