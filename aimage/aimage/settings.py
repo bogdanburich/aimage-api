@@ -25,8 +25,21 @@ if ENVIRONMENT == 'DEV':
 else:
     DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    'localhost',
+    '0.0.0.0',
+    '127.0.0.1',
+    'http://aimage.pro',
+    'https://aimage.pro',
+]
 
+CSRF_TRUSTED_ORIGINS = [
+    'localhost',
+    '0.0.0.0',
+    '127.0.0.1',
+    'http://aimage.pro',
+    'https://aimage.pro',
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
