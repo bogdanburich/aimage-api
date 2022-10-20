@@ -37,7 +37,7 @@ jobs:
           script: |
             docker pull ${{ secrets.DOCKER_USERNAME }}/aimage-api:lastest
             docker-compose stop
-            docker-compose rm -f aimage
+            docker-compose rm -y aimage
             docker-compose up -d
   
   notification:
