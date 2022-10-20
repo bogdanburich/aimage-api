@@ -35,6 +35,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
+            docker image rm ${{ secrets.DOCKER_USERNAME }}/aimage-api:lastest -f
             docker pull ${{ secrets.DOCKER_USERNAME }}/aimage-api:lastest
             docker-compose stop
             docker-compose rm -y aimage
