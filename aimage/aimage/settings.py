@@ -26,19 +26,19 @@ else:
     DEBUG = False
 
 ALLOWED_HOSTS = [
-    'aimage',
-    'localhost',
-    '0.0.0.0',
-    '127.0.0.1',
+    'http://aimage',
+    'http://localhost',
+    'http://0.0.0.0',
+    'http://127.0.0.1',
     'http://aimage.pro',
     'https://aimage.pro',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'aimage',
-    'localhost',
-    '0.0.0.0',
-    '127.0.0.1',
+    'http://aimage',
+    'http://localhost',
+    'http://0.0.0.0',
+    'http://127.0.0.1',
     'http://aimage.pro',
     'https://aimage.pro',
 ]
