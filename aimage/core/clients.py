@@ -1,15 +1,11 @@
-from typing import Optional
-
 import openai
-from django.conf import settings
-from pydalle import Dalle
 
 from .config import MAX_TOKENS, MODEL, TEMPERATURE
 
 
-class OpenAIClient(openai.Completion):
+class TextClient(openai.Completion):
 
-    def get_response(self, text) -> dict:
+    def _get_response(self, text) -> dict:
         response = self.create(
             model=MODEL,
             temperature=TEMPERATURE,
@@ -19,14 +15,18 @@ class OpenAIClient(openai.Completion):
         return response
 
     def get_text(self, *args) -> str:
-        response = self.get_response(*args)
+        response = self._get_response(*args)
         text = response['choices'][0]['text']
         return text.strip().replace('\n', ' ')
 
 
-class DalleClient(Dalle):
+class ImageClient(openai.Image):
 
-    def __init__(self, headers: Optional[dict] = None):
-        username = settings.DALLE_USERNAME
-        password = settings.DALLE_PASSWORD
-        super().__init__(username, password, headers)
+    def _get_response(self, text) -> dict:
+        response = self.create(prompt=text)
+        return response
+
+    def get_image(self, *args) -> str:
+        response = self._get_response(*args)
+        image_url = response['data'][0]['url']
+        return image_url
