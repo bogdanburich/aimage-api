@@ -35,10 +35,10 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            docker image rm ${{ secrets.DOCKER_USERNAME }}/aimage-api:lastest -f
-            docker pull ${{ secrets.DOCKER_USERNAME }}/aimage-api:lastest
+            docker image rm ${{ secrets.DOCKER_USERNAME }}/aimage-api:latest -f
+            docker pull ${{ secrets.DOCKER_USERNAME }}/aimage-api:latest
             docker-compose stop
-            docker-compose rm -y aimage
+            docker-compose rm -fsv aimage
             docker-compose up -d
   
   notification:
