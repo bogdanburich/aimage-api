@@ -14,6 +14,7 @@ class Story(models.Model):
     type = models.CharField(max_length=255)
     text = models.TextField()
     story = models.TextField(null=True, blank=True)
+    style = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -77,18 +78,18 @@ class Story(models.Model):
 
         return text
 
-    def _generate_story(self, text) -> str:
+    def _generate_story(self, text, style) -> str:
         """Generate story based on generated text"""
         client = TextClient()
-        style = self._get_style()
-        story = f'{client.get_text(text)} in {style} style'
+        story = f'{client.get_text(text)} Style: {style} style'
         return story
 
     def save(self, *args, **kwargs) -> None:
         entity = self._get_entity()
         self.type = entity['type']
+        self.style = self._get_style()
         self.text = self._generate_text(entity)
-        self.story = self._generate_story(self.text)
+        self.story = self._generate_story(self.text, self.style)
         super(Story, self).save(*args, **kwargs)
 
     class Meta:
@@ -119,13 +120,3 @@ class Image(models.Model):
         client = ImageClient()
         self.image = client.get_image(self.story.story)
         super(Image, self).save(*args, **kwargs)
-
-        # tasks = client.text2im(self.story.story)
-        # for image in tasks.download():
-        #     self.pk = None  # avoid overwriting existing image
-        #     image_io = BytesIO()
-        #     image = image.to_pil().save(image_io, format='PNG')
-        #     file = ContentFile(image_io.getvalue())
-        #     name = f'{uuid.uuid4()}.png'
-        #     self.image.save(name, file, save=False)
-        #     super(Image, self).save(*args, **kwargs)

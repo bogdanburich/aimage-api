@@ -14,10 +14,6 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 OPENAI_ORG_KEY = os.getenv('OPENAI_ORG_KEY')
 
-DALLE_USERNAME = os.getenv('DALLE_USERNAME')
-DALLE_PASSWORD = os.getenv('DALLE_PASSWORD')
-
-
 ENVIRONMENT = os.getenv('ENVIRONMENT')
 
 if ENVIRONMENT == 'DEV':
@@ -51,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'api',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
