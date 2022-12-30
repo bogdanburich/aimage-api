@@ -77,7 +77,7 @@ class Story(models.Model):
     def _generate_story(self, text, style) -> str:
         """Generate story based on generated text"""
         client = TextClient()
-        story = f'{client.get_text(text)} Style: dixit-{style} style'
+        story = f'{client.get_text(text)} Style: dixit style'
         return story
 
     def save(self, *args, **kwargs) -> None:
