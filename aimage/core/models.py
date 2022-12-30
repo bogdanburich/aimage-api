@@ -100,7 +100,7 @@ class Image(models.Model):
     """Image model."""
 
     story = models.ForeignKey(Story, on_delete=models.CASCADE)
-    image = models.URLField()
+    image = models.URLField(max_length=500)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
