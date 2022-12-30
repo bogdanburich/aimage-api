@@ -59,7 +59,7 @@ class Story(models.Model):
            short description of fauvism landscape with forest
            short description of mask item
         """
-        base_text = 'Generate a short description of'
+        base_text = 'Generate one sentence of'
         type = entity['type']
         characters = entity.get('characters', None)
 
@@ -81,7 +81,7 @@ class Story(models.Model):
     def _generate_story(self, text, style) -> str:
         """Generate story based on generated text"""
         client = TextClient()
-        story = f'{client.get_text(text)} Style: {style} style'
+        story = f'{client.get_text(text)} Style: {style}-dixit style'
         return story
 
     def save(self, *args, **kwargs) -> None:
