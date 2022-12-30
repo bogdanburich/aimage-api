@@ -4,6 +4,10 @@ TEMPERATURE = 0.9
 
 MAX_TOKENS = 200
 
+IMAGE_SIZE = "1024x1024"
+
+IMAGES_COUNT = 1
+
 CHARACTERISTICS = [
     "bizarre",
     "curious",
@@ -49,7 +53,6 @@ CHARACTERS = [
 ]
 
 STYLES = [
-    "3D render",
     "abstract",
     "cartoon",
     "cubism",
@@ -57,7 +60,6 @@ STYLES = [
     "digital art",
     "expressionism",
     "expressive oil painting",
-    "fauvism",
     "figurative",
     "futuristic neon",
     "impressionism",

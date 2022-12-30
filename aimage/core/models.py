@@ -54,11 +54,7 @@ class Story(models.Model):
         return self._random(entity['context'])
 
     def _generate_text(self, entity) -> str:
-        """Generate text to generate story, exmaples:
-           short description of fauvism landscape with forest
-           short description of fauvism landscape with forest
-           short description of mask item
-        """
+        """Generate text to generate story"""
         base_text = 'Generate one sentence of'
         type = entity['type']
         characters = entity.get('characters', None)
@@ -81,7 +77,7 @@ class Story(models.Model):
     def _generate_story(self, text, style) -> str:
         """Generate story based on generated text"""
         client = TextClient()
-        story = f'{client.get_text(text)} Style: {style}-dixit style'
+        story = f'{client.get_text(text)} Style: dixit-{style} style'
         return story
 
     def save(self, *args, **kwargs) -> None:
