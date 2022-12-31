@@ -39,6 +39,10 @@ ALLOWED_HOSTS = [
     'aimage.pro',
 ]
 
+CORS_ALLOWED_ORIGINS = [
+    '*',
+]
+
 CSRF_TRUSTED_ORIGINS = [
     'http://aimage',
     'http://localhost',
