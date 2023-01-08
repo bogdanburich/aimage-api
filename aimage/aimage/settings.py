@@ -39,8 +39,6 @@ ALLOWED_HOSTS = [
     'aimage.pro',
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True
-
 CSRF_TRUSTED_ORIGINS = [
     'http://aimage',
     'http://localhost',
@@ -60,6 +58,7 @@ INSTALLED_APPS = [
     'core',
     'api',
     'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -70,9 +69,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'aimage.urls'
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 TEMPLATES = [
     {
