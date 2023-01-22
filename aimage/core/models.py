@@ -101,6 +101,7 @@ class Image(models.Model):
     """Image model."""
 
     story = models.ForeignKey(Story, on_delete=models.CASCADE)
+    moderation_like = models.BooleanField(default=False)
     image = models.FileField(upload_to='images/')
     created_at = models.DateTimeField(auto_now_add=True)
 

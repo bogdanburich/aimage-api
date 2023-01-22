@@ -18,12 +18,12 @@ class StoryAdmin(admin.ModelAdmin):
 class ImageAdmin(admin.ModelAdmin):
     form = ImageAdminForm
     search_fields = ('story__text',)
-    list_display = ('display_image', 'story', 'created_at')
+    list_display = ('display_image', 'moderation_like', 'story', 'created_at')
     list_filter = ('story__type',)
     list_per_page = 10
     fieldsets = (
         (None, {
-            'fields': ('count',)
+            'fields': ('count', 'moderation_like')
         }),)
 
     def save_model(self, request, obj, form, change):
