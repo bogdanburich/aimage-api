@@ -101,18 +101,20 @@ class Image(models.Model):
     """Image model."""
 
     story = models.ForeignKey(Story, on_delete=models.CASCADE)
-    image = models.FileField(upload_to='images/', null=True, blank=True)
+    image = models.FileField(upload_to='images/')
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name_plural = "Images"
 
     def __str__(self):
-        return self.image.url
+        if self.image:
+            return self.image.url
+        return 'Prosessing...'
 
     def display_image(self):
-        html = f'<img src="{self.image.url}" width="300" height="300" />'
         if self.image:
+            html = f'<img src="{self.image.url}" width="300" height="300" />'
             return format_html(html)
         return 'No image'
 
@@ -126,9 +128,6 @@ class Image(models.Model):
         img_temp = NamedTemporaryFile(delete=True)
         image_url = self._get_image_url()
         img_temp.write(urlopen(image_url).read())
-        print('Image writed')
         img_temp.flush()
-        print('Memory flushed')
         self.image.save(f"{uuid.uuid4()}.png", File(img_temp), save=False)
-        print('Image saved')
         super(Image, self).save(*args, **kwargs)
