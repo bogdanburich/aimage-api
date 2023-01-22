@@ -6,12 +6,12 @@ class StorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Story
-        fields = ('id', 'type', 'text', 'story')
+        fields = ('id', 'type', 'text', 'generated_story')
 
 
 class ImageSerializer(serializers.ModelSerializer):
 
-    story = serializers.SlugField(source='story.story')
+    story = serializers.SlugField(source='story.generated_story')
 
     class Meta:
         model = Image
