@@ -115,12 +115,12 @@ class Image(models.Model):
         if self.image:
             return format_html(html)
         return 'No image'
-    
+
     def _get_image_url(self) -> str:
         client = ImageClient()
         image_url = client.get_image_url(self.story.generated_story)
         return image_url
-         
+
     def save(self, *args, **kwargs):
         self.story = Story.objects.create()
         img_temp = NamedTemporaryFile(delete=True)
