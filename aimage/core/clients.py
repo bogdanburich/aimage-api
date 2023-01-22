@@ -23,10 +23,10 @@ class TextClient(openai.Completion):
 class ImageClient(openai.Image):
 
     def _get_response(self, text) -> dict:
-        response = self.create(prompt=text)
+        response = self.create(prompt=text, n=1)
         return response
 
-    def get_image(self, *args) -> str:
+    def get_image_url(self, *args) -> str:
         response = self._get_response(*args)
         image_url = response['data'][0]['url']
         return image_url

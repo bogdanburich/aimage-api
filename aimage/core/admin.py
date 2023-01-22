@@ -8,10 +8,10 @@ admin.site.site_header = 'aimage'
 
 @admin.register(Story)
 class StoryAdmin(admin.ModelAdmin):
-    search_fields = ('id', 'text', 'story')
-    list_display = ('type', 'text', 'story', 'created_at')
+    search_fields = ('id', 'text', 'generated_story')
+    list_display = ('type', 'text', 'generated_story', 'created_at')
     list_filter = ('type',)
-    readonly_fields = ('id', 'type', 'text', 'story', 'created_at')
+    readonly_fields = ('id', 'type', 'text', 'generated_story', 'created_at')
 
 
 @admin.register(Image)

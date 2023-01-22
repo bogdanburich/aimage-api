@@ -1,8 +1,13 @@
 import random
+import uuid
 from typing import Optional, Union
 
+from django.core.files import File
 from django.db import models
 from django.utils.html import format_html
+from django.core.files.temp import NamedTemporaryFile
+
+from urllib.request import urlopen
 
 from .clients import ImageClient, TextClient
 from .config import CHARACTERISTICS, CHARACTERS, ENTITIES, STYLES
@@ -13,12 +18,12 @@ class Story(models.Model):
 
     type = models.CharField(max_length=255)
     text = models.TextField()
-    story = models.TextField(null=True, blank=True)
+    generated_story = models.TextField(null=True, blank=True)
     style = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.story
+        return self.generated_story
 
     def _random(self, objects) -> Union[str, int, dict]:
         return random.choice(objects)
@@ -85,7 +90,7 @@ class Story(models.Model):
         self.type = entity['type']
         self.style = self._get_style()
         self.text = self._generate_text(entity)
-        self.story = self._generate_story(self.text, self.style)
+        self.generated_story = self._generate_story(self.text, self.style)
         super(Story, self).save(*args, **kwargs)
 
     class Meta:
@@ -96,23 +101,34 @@ class Image(models.Model):
     """Image model."""
 
     story = models.ForeignKey(Story, on_delete=models.CASCADE)
-    image = models.URLField(max_length=500)
+    image = models.FileField(upload_to='images/')
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name_plural = "Images"
 
     def __str__(self):
-        return self.image
+        return self.image.url
 
     def display_image(self):
-        html = f'<img src="{self.image}" width="300" height="300" />'
+        html = f'<img src="{self.image.url}" width="300" height="300" />'
         if self.image:
             return format_html(html)
         return 'No image'
-
+    
+    def _get_image_url(self) -> str:
+        client = ImageClient()
+        image_url = client.get_image_url(self.story.generated_story)
+        return image_url
+         
     def save(self, *args, **kwargs):
         self.story = Story.objects.create()
-        client = ImageClient()
-        self.image = client.get_image(self.story.story)
+        img_temp = NamedTemporaryFile(delete=True)
+        image_url = self._get_image_url()
+        img_temp.write(urlopen(image_url).read())
+        print('Image writed')
+        img_temp.flush()
+        print('Memory flushed')
+        self.image.save(f"{uuid.uuid4()}.png", File(img_temp), save=False)
+        print('Image saved')
         super(Image, self).save(*args, **kwargs)
